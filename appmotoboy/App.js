@@ -9,15 +9,15 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen
+        <Stack.Screen 
           name="HomeScreen"
           component={HomeScreen}
-          options={{ title: 'Cozinha' }}
+          options={{ title: 'Motoboy' }}
         />
         <Stack.Screen
           name="PedidosScreen"
           component={PedidosScreen}
-          options={{ title: 'Pedidos' }}
+          options={{ title: 'Entregas' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

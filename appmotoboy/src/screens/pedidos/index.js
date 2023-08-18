@@ -8,7 +8,7 @@ const PedidosScreen = ({ navigation }) => {
     const [pedidos, setPedidos] = useState([]);
     const uri = 'http://localhost:3000/pedido';
     useEffect(() => {
-        fetch(uri + '/cozinha', { method: 'GET' })
+        fetch(uri, { method: 'GET' })
             .then(response => response.json())
             .then(data => {
                 setPedidos(data);
@@ -38,30 +38,44 @@ const PedidosScreen = ({ navigation }) => {
             });
     }
 
+    console.log(pedidos)
+    pedidos.forEach(pedidos => {
+
+    })
+
     return (
         <ImageBackground style={styles.container} source={require('../../../assets/Fundo.png')}>
             <FlatList
                 data={pedidos}
-                renderItem={({ item }) => (
-                    <View style={styles.pedido}>
-                        <Text style={styles.text}>ID: {item.id}</Text>
-                        <Text style={styles.text}>
-                            Data: {item.dataPedido.toString().slice(0, 10) + " "}
-                            Hora: {item.dataPedido.toString().slice(11, 16)}
-                        </Text>
-                        <Text style={styles.text}>Entrega: {item.clienteId == 1 ? "Não" : "Sim"}</Text>
-                        <ItemPedido item={item.itens} />
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => concluirPedido(item.id, item.clienteId)}
-                        >
-                            <Text style={styles.buttonText}>Concluído</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
+                renderItem={({ item }) => {
+                    if (
+                        item.clienteId === 1 ||
+                        (item.dataCozinha === undefined && item.dataEntrega.length !== 0)
+                    ) {
+                        return null; // Não renderizar nada para esses casos
+                    }
+    
+                    return (
+                        <View style={styles.pedido}>
+                            <Text style={styles.text}>ID: {item.id}</Text>
+                            <Text style={styles.text}>
+                                Data: {item.dataPedido.toString().slice(0, 10) + " "}
+                                Hora: {item.dataPedido.toString().slice(11, 16)}
+                            </Text>
+                            <ItemPedido item={item} />
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => concluirPedido(item.id, item.clienteId)}
+                            >
+                                <Text style={styles.buttonText}>Entregue</Text>
+                            </TouchableOpacity>
+                        </View>
+                    );
+                }}
             />
         </ImageBackground>
     );
+    
 }
 
 export default PedidosScreen;
