@@ -1,4 +1,4 @@
-import { View, ImageBackground, Text, TouchableOpacity, Image } from 'react-native';
+import {ImageBackground, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './styles'
 
 const HomeScreen = ({ navigation }) => {

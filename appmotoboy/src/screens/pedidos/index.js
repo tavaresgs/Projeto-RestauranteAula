@@ -6,6 +6,7 @@ import ItemPedido from '../../components/item';
 const PedidosScreen = ({ navigation }) => {
 
     const [pedidos, setPedidos] = useState([]);
+    const [clientes, setClientes] = useState([]);
     const uri = 'http://localhost:3000/pedido';
     useEffect(() => {
         fetch(uri, { method: 'GET' })
@@ -13,15 +14,20 @@ const PedidosScreen = ({ navigation }) => {
             .then(data => {
                 setPedidos(data);
             });
+        fetch('http://localhost:3000/cliente', { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                setClientes(data)
+            });
+            
     }, []);
 
     const concluirPedido = (id, clienteId) => {
         const corpo = {
             id: id,
-            dataCozinha: new Date(),
+            dataEntrega: new Date(),
         }
-        if (clienteId == 1) corpo.dataEntrega = new Date();
-
+       
         const options = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -38,11 +44,6 @@ const PedidosScreen = ({ navigation }) => {
             });
     }
 
-    console.log(pedidos)
-    pedidos.forEach(pedidos => {
-
-    })
-
     return (
         <ImageBackground style={styles.container} source={require('../../../assets/Fundo.png')}>
             <FlatList
@@ -50,7 +51,7 @@ const PedidosScreen = ({ navigation }) => {
                 renderItem={({ item }) => {
                     if (
                         item.clienteId === 1 ||
-                        (item.dataCozinha === undefined && item.dataEntrega.length !== 0)
+                        (!item.dataCozinha || item.dataEntrega)
                     ) {
                         return null; // Não renderizar nada para esses casos
                     }
@@ -62,7 +63,7 @@ const PedidosScreen = ({ navigation }) => {
                                 Data: {item.dataPedido.toString().slice(0, 10) + " "}
                                 Hora: {item.dataPedido.toString().slice(11, 16)}
                             </Text>
-                            <ItemPedido item={item} />
+                            <ItemPedido item = {item} clientes = {clientes} />
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={() => concluirPedido(item.id, item.clienteId)}

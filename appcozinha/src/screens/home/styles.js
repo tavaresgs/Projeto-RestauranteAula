@@ -7,11 +7,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
+        justifyContent: 'space-around',
     },
     logo:{
-        width:250,
-        resizeMode: 'contain',
-    },
+        width: 180,
+        height: 180,
+     },
     button: {
         backgroundColor: '#A90404',
         padding: 10,
